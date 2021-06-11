@@ -29,7 +29,7 @@ public class ProjectTaskService {
             backlog.setPTSequence(backlogSequence);
             projectTask.setProjectSequence(projectIdentifier + "-" + backlogSequence);
             projectTask.setProjectIdentifier(projectIdentifier);
-            if (projectTask.getPriority() == null) {
+            if (projectTask.getPriority() == 0 || projectTask.getPriority() == null) {
                 projectTask.setPriority(3);
             }
             if (projectTask.getStatus() == "" || projectTask.getStatus() == null) {
@@ -61,5 +61,15 @@ public class ProjectTaskService {
             throw new ProjectNotFoundException("Project task with id " + sequence + " does not exists in Project with id " + backlog_id);
         }
         return projectTask;
+    }
+
+    public ProjectTask updateByProjectSequence(ProjectTask updatedTask, String backlog_id, String sequence) {
+        ProjectTask projectTask = findPTByProjectSequence(backlog_id, sequence);
+        projectTask = updatedTask;
+        return projectTaskRepository.save(projectTask);
+    }
+
+    public void deleteProjectTaskBySequence(String backlog_id, String sequence) {
+        projectTaskRepository.delete(findPTByProjectSequence(backlog_id, sequence));
     }
 }
