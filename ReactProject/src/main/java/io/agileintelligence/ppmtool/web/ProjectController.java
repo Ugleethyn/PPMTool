@@ -9,6 +9,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import javax.validation.Valid;
+import java.security.Principal;
 
 @RestController
 @RequestMapping("/api/project")
@@ -20,10 +21,10 @@ public class ProjectController {
     MapValidationErrorService mapValidationErrorService;
 
     @PostMapping("")
-    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult){
+    public ResponseEntity<?> createNewProject(@Valid @RequestBody Project project, BindingResult bindingResult, Principal principal){
         ResponseEntity<?> errorMap = mapValidationErrorService.mapValidationErrorService(bindingResult);
         if(errorMap!=null)return errorMap;
-        return new ResponseEntity<Project>(projectService.saveOrUpdateProject(project),HttpStatus.CREATED);
+        return new ResponseEntity<Project>(projectService.saveOrUpdateProject(project,principal.getName()),HttpStatus.CREATED);
     }
 
     @GetMapping("/{projectId}")
