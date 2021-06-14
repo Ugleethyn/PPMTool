@@ -21,6 +21,15 @@ class Login extends Component {
     if (nextProps.security.validToken) {
       this.props.history.push("/dashboard");
     }
+    if (nextProps.errors) {
+      this.setState({ errors: nextProps.errors });
+    }
+  }
+
+  componentDidMount() {
+    if (this.props.security.validToken) {
+      this.props.history.push("/dashboard");
+    }
   }
 
   onChange(e) {
@@ -56,7 +65,7 @@ class Login extends Component {
                     value={this.state.username}
                     onChange={this.onChange}
                   />
-                  {errors.fullName && (
+                  {errors.username && (
                     <div className="invalid-feedback">{errors.username}</div>
                   )}
                 </div>
@@ -71,7 +80,7 @@ class Login extends Component {
                     value={this.state.password}
                     onChange={this.onChange}
                   />
-                  {errors.fullName && (
+                  {errors.password && (
                     <div className="invalid-feedback">{errors.password}</div>
                   )}
                 </div>
@@ -88,6 +97,7 @@ class Login extends Component {
 Login.propTypes = {
   login: PropTypes.func.isRequired,
   errors: PropTypes.object.isRequired,
+  security: PropTypes.object.isRequired,
 };
 
 const mapStateToProps = (state) => ({
